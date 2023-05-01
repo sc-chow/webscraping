@@ -21,5 +21,17 @@
             <artifactId>jsoup</artifactId>
             <version>1.15.4</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.mongodb/mongodb-driver-sync -->
+        <!-- TO RELOAD MAVEN PROJECT: 1. CTRL + SHIFT + A 2. type in Actions: reload 3. Press reload maven projects -->
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+            <version>3.7.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver</artifactId>
+            <version>3.7.1</version>
+        </dependency>
     </dependencies>
 </project>
