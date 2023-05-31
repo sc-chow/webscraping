@@ -4,9 +4,50 @@ import org.jsoup.nodes.*;
 import org.jsoup.select.*;
 import java.io.IOException;
 
-public class Main {
-    public static void main(String[] args) {
-        Document doc;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoClient;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.ConnectionString;
+import com.mongodb.ServerAddress;
+import com.mongodb.MongoCredential;
+import com.mongodb.MongoClientOptions;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import static com.mongodb.client.model.Filters.*;
+import com.mongodb.client.model.CreateCollectionOptions;
+import com.mongodb.client.model.ValidationOptions;
+
+import org.bson.Document;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class pokemondb {
+    static void database (){
+        // Enable MongoDB logging in general
+        System.setProperty("DEBUG.MONGO", "true");
+
+        // Enable DB operation tracing
+        System.setProperty("DB.TRACE", "true");
+
+        //create a MongoDB that is created locally
+        MongoClient mongoClient = MongoClients.create();
+
+        //get database named pokemon, if it is not created, it will be created when data is added to the db
+        MongoDatabase database = mongoClient.getDatabase("pokemon");
+        //Create a collection
+        //Collection = Table
+        database.createCollection("AllPokemon");
+
+        //Retrieve a collection
+        MongoCollection<org.bson.Document> collection = database.getCollection("AllPokemon");
+
+        //var docs = new ArrayList < Document > ();
+
+        //Tuple / Row = Document
+        //Column = Field
+    
+        org.jsoup.nodes.Document doc;
         String url = "https://pokemondb.net/pokedex/national";
         try {
             doc = Jsoup.connect(url).get();
@@ -27,6 +68,8 @@ public class Main {
         Elements div_infocard = doc.getElementsByClass("infocard");
 
         int generation_num = 1;
+        
+        int counter = 1;
 
         //Iterate through all info cards
         //same as (int i = 0;i<div_infocard.size;i++)
@@ -87,10 +130,20 @@ public class Main {
                 String gen = "9";
                 generation_num++;
             }
+
+            var d1 = new Document("_id",counter);
+            d1.append("_generation",generation_num);
+            d1.append("_name",name);
+            d1.append("_type",type);
+            d1.append("_number",num);
+            
+            collection.insertOne(d1);
+
+            counter++;
         }
 
-
-
-
+    }
+    public static void main(String[] args) {
+        database();
     }
 }
